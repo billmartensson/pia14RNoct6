@@ -1,3 +1,4 @@
+import BigRedErrorBox from "@/components/BigRedErrorBox";
 import { useState } from "react";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -23,16 +24,26 @@ export default function Index() {
         }
     }
 
-    function addfromtext() {
+    function calculatefromtext(calcplus: boolean) {
 
         var numbertoadd = Number(enteredtext)
+
+        var thenewnumber = mynumber
 
         if (isNaN(numbertoadd)) {
             // INTE EN SIFFRA
             setShowbigrederror(true)
         } else {
             // ÄR EN SIFFRA
-            setMynumber(mynumber + numbertoadd)
+            if (calcplus == true) {
+                thenewnumber += numbertoadd
+            } else {
+                thenewnumber -= numbertoadd
+                if (thenewnumber < 0) {
+                    thenewnumber = 0
+                }
+            }
+            setMynumber(thenewnumber)
             setShowbigrederror(false)
         }
 
@@ -48,7 +59,7 @@ export default function Index() {
             }}
         >
 
-            {mynumber == 5 &&
+            {mynumber >= 5 &&
                 <Text>STOR SIFFRA!!!</Text>
             }
 
@@ -71,22 +82,10 @@ export default function Index() {
 
 
             {showbigrederror &&
-
                 <TouchableOpacity onPress={() => setShowbigrederror(false)}>
-                    <View style={{
-                        backgroundColor: "red",
-                        width: 200,
-                        height: 50,
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <Text style={{
-                            color: "white"
-                        }}>INTE EN SIFFRA!!!!</Text>
-                    </View>
+                    <BigRedErrorBox />
                 </TouchableOpacity>
             }
-
 
             <TextInput
                 style={{
@@ -99,7 +98,12 @@ export default function Index() {
 
             <Button
                 title="ADD"
-                onPress={addfromtext}
+                onPress={() => calculatefromtext(true)}
+            />
+
+            <Button
+                title="REMOVE"
+                onPress={() => calculatefromtext(false)}
             />
 
         </View>
