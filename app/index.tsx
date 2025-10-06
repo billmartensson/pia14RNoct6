@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Button, Text, View } from "react-native";
+import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
 
     const [mynumber, setMynumber] = useState(0)
+
+    const [enteredtext, setEnteredtext] = useState("")
+
+    const [showbigrederror, setShowbigrederror] = useState(false)
 
     function doplus() {
         if (mynumber == 5) {
@@ -19,6 +23,22 @@ export default function Index() {
         }
     }
 
+    function addfromtext() {
+
+        var numbertoadd = Number(enteredtext)
+
+        if (isNaN(numbertoadd)) {
+            // INTE EN SIFFRA
+            setShowbigrederror(true)
+        } else {
+            // ÄR EN SIFFRA
+            setMynumber(mynumber + numbertoadd)
+            setShowbigrederror(false)
+        }
+
+        setEnteredtext("")
+    }
+
     return (
         <View
             style={{
@@ -27,6 +47,11 @@ export default function Index() {
                 alignItems: "center",
             }}
         >
+
+            {mynumber == 5 &&
+                <Text>STOR SIFFRA!!!</Text>
+            }
+
             <Text>{mynumber}</Text>
 
             <View style={{
@@ -43,6 +68,39 @@ export default function Index() {
                     onPress={dominus}
                 />
             </View>
+
+
+            {showbigrederror &&
+
+                <TouchableOpacity onPress={() => setShowbigrederror(false)}>
+                    <View style={{
+                        backgroundColor: "red",
+                        width: 200,
+                        height: 50,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <Text style={{
+                            color: "white"
+                        }}>INTE EN SIFFRA!!!!</Text>
+                    </View>
+                </TouchableOpacity>
+            }
+
+
+            <TextInput
+                style={{
+                    backgroundColor: "lightgray",
+                    width: "100%"
+                }}
+                onChangeText={setEnteredtext}
+                value={enteredtext}
+            />
+
+            <Button
+                title="ADD"
+                onPress={addfromtext}
+            />
 
         </View>
     );
